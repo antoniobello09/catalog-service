@@ -29,6 +29,9 @@ jobs:
           fail-build: false
           severity-cutoff: high
           output-format: sarif
+        env:
+          GRYPE_DB_AUTO_UPDATE: "true"
+          GRYPE_DB_MAX_ALLOWED_BUILT_AGE: "168h"
       - name: Upload vulnerability report
         uses: github/codeql-action/upload-sarif@v4
         if: success() || failure()
