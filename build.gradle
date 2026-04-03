@@ -27,5 +27,5 @@ tasks.named('test') {
 }
 
 ext {
-	set('tomcat.version', '9.0.102')
+	set('tomcat.version', '9.0.113')
 }
