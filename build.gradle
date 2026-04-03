@@ -25,3 +25,7 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+ext {
+	set('tomcat.version', '9.0.102')
+}
