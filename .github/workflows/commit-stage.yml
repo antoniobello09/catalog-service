@@ -21,20 +21,16 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew build
+      - name: Install Grype
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
+          grype db update
       - name: Code vulnerability scanning
-        uses: anchore/scan-action@v4
-        id: scan
-        with:
-          path: "${{ github.workspace }}"
-          fail-build: false
-          severity-cutoff: high
-          output-format: sarif
-        env:
-          GRYPE_DB_AUTO_UPDATE: "true"
-          GRYPE_DB_MAX_ALLOWED_BUILT_AGE: "168h"
+        run: |
+          grype dir:${{ github.workspace }} -o sarif > results.sarif --fail-on high || true
       - name: Upload vulnerability report
         uses: github/codeql-action/upload-sarif@v4
         if: success() || failure()
         with:
-          sarif_file: ${{ steps.scan.outputs.sarif }}
+          sarif_file: results.sarif
           wait-for-processing: true
